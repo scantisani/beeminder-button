@@ -1,0 +1,28 @@
+inherit_gem:
+  standard: config/base.yml
+
+require:
+  - standard
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+RSpec:
+  Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+
+RSpec/ExampleLength:
+  Max: 10
+  CountAsOne:
+    - hash
+    - array
+    - heredoc
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 4
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
