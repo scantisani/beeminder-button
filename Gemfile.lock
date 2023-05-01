@@ -4,6 +4,7 @@ GEM
     addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
+    concurrent-ruby (1.2.2)
     crack (0.4.5)
       rexml
     diff-lcs (1.5.0)
@@ -51,6 +52,8 @@ GEM
       rubocop (= 1.31.2)
       rubocop-performance (= 1.14.3)
     timecop (0.9.6)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
     unicode-display_width (2.2.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
@@ -58,6 +61,7 @@ GEM
       hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
@@ -66,6 +70,7 @@ DEPENDENCIES
   rubocop-rspec
   standard
   timecop
+  tzinfo
   webmock
 
 BUNDLED WITH
