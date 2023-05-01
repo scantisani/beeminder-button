@@ -6,6 +6,8 @@ require "uri"
 DATAPOINT_ENDPOINT = "https://www.beeminder.com/api/v1/users/dwarvensphere/goals/upbeforenine/datapoints.json"
 HEADERS = {"Content-Type" => "application/json"}
 
+TIMEZONE = TZInfo::Timezone.get("Europe/London")
+
 def lambda_handler(event:, context:)
   return button_pressed_before_five if before_five_am?
   return datapoint_already_exists if datapoint_exists?
@@ -22,13 +24,13 @@ def before_five_am?
 end
 
 def minutes_before_nine
-  nine_am_today = Time.new(now.year, now.month, now.day, 9, 0, 0)
+  nine_am_today = TIMEZONE.local_time(now.year, now.month, now.day, 9, 0, 0)
 
   (nine_am_today - now) / 60
 end
 
 def now
-  @now ||= TZInfo::Timezone.get("Europe/London").now
+  @now ||= TIMEZONE.now
 end
 
 def button_pressed_before_five

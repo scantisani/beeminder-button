@@ -18,7 +18,8 @@ RSpec.describe "Lambda function" do
   let(:post_response_code) { 200 }
   let(:post_response_body) { '{"value":10.0,"id":"000000000000000000000000","daystamp":"20230403"}' }
 
-  let(:time) { Time.new(2023, 4, 3, 8, 30, 0) }
+  let(:tz) { TZInfo::Timezone.get("Europe/London") }
+  let(:time) { tz.local_time(2023, 4, 3, 8, 30, 0) }
 
   before do
     ENV["BEEMINDER_TOKEN"] = beeminder_token
@@ -74,7 +75,7 @@ RSpec.describe "Lambda function" do
   end
 
   context "when invoked before 9AM" do
-    let(:time) { Time.new(2023, 4, 3, 8, 30, 0) }
+    let(:time) { tz.local_time(2023, 4, 3, 8, 30, 0) }
     let(:expected_daystamp) { "20230403" }
     let(:expected_minutes) { 30 }
 
@@ -103,7 +104,7 @@ RSpec.describe "Lambda function" do
     end
 
     context "and before 5AM" do
-      let(:time) { Time.new(2023, 4, 3, 4, 30, 0) }
+      let(:time) { tz.local_time(2023, 4, 3, 4, 30, 0) }
 
       it "returns 'unprocessable entity'" do
         expect(lambda[:statusCode]).to eq(422)
@@ -121,7 +122,7 @@ RSpec.describe "Lambda function" do
   end
 
   context "when invoked after 9AM" do
-    let(:time) { Time.new(2023, 4, 3, 9, 15, 0) }
+    let(:time) { tz.local_time(2023, 4, 3, 9, 15, 0) }
     let(:expected_daystamp) { "20230403" }
     let(:expected_minutes) { -15 }
 
@@ -150,7 +151,7 @@ RSpec.describe "Lambda function" do
     end
 
     context "when it is the weekend" do
-      let(:time) { Time.new(2023, 4, 2, 9, 15, 0) }
+      let(:time) { tz.local_time(2023, 4, 2, 9, 15, 0) }
       let(:expected_daystamp) { "20230402" }
       let(:expected_minutes) { 0 }
 
@@ -203,7 +204,7 @@ RSpec.describe "Lambda function" do
   end
 
   context "when the clocks have gone back" do
-    let(:time) { Time.new(2023, 11, 3, 8, 30, 0) }
+    let(:time) { tz.local_time(2023, 11, 3, 8, 30, 0) }
     let(:expected_daystamp) { "20231103" }
     let(:expected_minutes) { 30 }
 
