@@ -28,7 +28,7 @@ RSpec.describe "Lambda function" do
     stub_request(:get, get_url).to_return(status: get_response_code, body: get_response_body)
     stub_request(:post, post_url).to_return(status: post_response_code, body: post_response_body)
 
-    Timecop.travel(time)
+    Timecop.freeze(time)
   end
 
   context "when Beeminder does not authorize reading datapoints" do
