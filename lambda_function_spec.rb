@@ -201,4 +201,34 @@ RSpec.describe "Lambda function" do
       expect($stdout).to have_received(:puts).with(/datapoint for "20230403" already exists/i)
     end
   end
+
+  context "when the clocks have gone back" do
+    let(:time) { Time.new(2023, 11, 3, 8, 30, 0) }
+    let(:expected_daystamp) { "20231103" }
+    let(:expected_minutes) { 30 }
+
+    it "sends the time difference to Beeminder as a datapoint" do
+      lambda
+
+      expect(a_request(:post, post_url)
+        .with(
+          body: "{\"auth_token\":\"#{beeminder_token}\",\"comment\":\"#{comment}\",\"daystamp\":\"#{expected_daystamp}\",\"value\":#{expected_minutes}}",
+          headers: headers
+        ))
+        .to have_been_made
+    end
+
+    it "returns a successful status" do
+      expect(lambda[:statusCode]).to eq(200)
+    end
+
+    it "includes the datapoint that was sent in the body" do
+      expect(lambda[:body]).to match(/sent datapoint '#{expected_minutes}' to beeminder/i)
+    end
+
+    it "logs that the datapoint was sent" do
+      lambda
+      expect($stdout).to have_received(:puts).with(/sent datapoint '#{expected_minutes}' to beeminder/i)
+    end
+  end
 end

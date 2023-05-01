@@ -1,5 +1,6 @@
 require "json"
 require "net/http"
+require "tzinfo"
 require "uri"
 
 DATAPOINT_ENDPOINT = "https://www.beeminder.com/api/v1/users/dwarvensphere/goals/upbeforenine/datapoints.json"
@@ -27,7 +28,7 @@ def minutes_before_nine
 end
 
 def now
-  @now ||= Time.now
+  @now ||= TZInfo::Timezone.get("Europe/London").now
 end
 
 def button_pressed_before_five
